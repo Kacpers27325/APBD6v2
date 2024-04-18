@@ -5,14 +5,12 @@ using Tutorial5.Models.DTOs;
 using Tutorial5.Repositories;
 
 namespace Tutorial5.Controllers;
-
 [ApiController]
 // [Route("/api/animals")]
 [Route("/api/[controller]")]
 public class AnimalsController : ControllerBase
 {
     private readonly IAnimalRepository _animalRepository;
-
     public AnimalsController(IAnimalRepository animalRepository)
     {
         _animalRepository = animalRepository;
@@ -21,7 +19,6 @@ public class AnimalsController : ControllerBase
     [HttpGet]
     public IActionResult GetAnimals(string orderBy = "Name") {
         var animals = _animalRepository.GetAnimals(orderBy);
-
         return Ok(animals);
     }
 
@@ -29,8 +26,6 @@ public class AnimalsController : ControllerBase
     public IActionResult AddAnimal(Animal animal)
     {
         _animalRepository.AddAnimal(animal);
-        
-        // 201
         return Created("/api/animals", null);
     }
     
@@ -38,15 +33,12 @@ public class AnimalsController : ControllerBase
     public IActionResult UpdateAnimal(int idAnimal, Animal animal)
     {
         var existingAnimal = _animalRepository.GetAnimalById(idAnimal);
-
         if (existingAnimal == null)
         {
-            return NotFound(); // 404
+            return NotFound();
         }
-
         _animalRepository.UpdateAnimal(idAnimal, animal);
-
-        return NoContent(); // 204
+        return NoContent();
     }
     
     [HttpDelete("{idAnimal}")]
@@ -55,5 +47,4 @@ public class AnimalsController : ControllerBase
         _animalRepository.DeleteAnimal(idAnimal);
         return NoContent();
     }
-    
 }
